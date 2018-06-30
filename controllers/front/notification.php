@@ -45,7 +45,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
         // get the callback data
         $callback = file_get_contents('php://input');
         // log all callbacks received for debugging purposes
-        $this->error("Callback received:", $callback, false);
+        //$this->error("Callback received:", $callback, false);
         if (!$callback) {
             // the callback data is empty, just die without logging anything
             die;
@@ -73,7 +73,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
         
         $invoice = $this->module->getPayment($callbackData->id);
         // log all invoices retrieved for debugging purposes
-        $this->error("Invoice retrieved:", json_encode($invoice), false);
+        //$this->error("Invoice retrieved:", json_encode($invoice), false);
         // check that the invoice has the data we need
         if (!$invoice || empty($invoice->data)) {
             $this->error("Invoice data missing.", json_encode($invoice));
