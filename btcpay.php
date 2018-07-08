@@ -554,28 +554,34 @@ class BTCPay extends PaymentModule
      */
     public function getStatusDesc($status, $exceptionStatus)
     {
-        if ($exceptionStatus === 'paidPartial') {
-            return $this->l("Underpayment — Paid amount is lower than required.");
-        } elseif ($exceptionStatus === 'paidOver') {
-            if ($status === 'paid') {
-                return $this->l("Overpayment — Payment has been received but not confirmed yet, more funds than requested received.");
-            } elseif ($status === 'confirmed' || $status === 'complete') {
-                return $this->l("Overpayment — Payment is confirmed, more funds than requested received.");
-            }
-        } elseif ($exceptionStatus === 'paidLate') {
-            return $this->l("Latepayment — Payment has been received after the configurable required timeframe.");
-        }
-        
         if ($status === 'new') {
-            return $this->l("Active — Waiting for payment.");
+            if ($exceptionStatus === 'paidPartial') {
+                return $this->l("Active — Waiting for payment, some funds received.");
+            } else {
+                return $this->l("Active — Waiting for payment.");
+            }
         } elseif ($status === 'expired') {
-            return $this->l("Expired — Not paid in the configurable required timeframe.");
+            if ($exceptionStatus === 'paidPartial') {
+                return $this->l("Underpayment — Paid amount is lower than required.");
+            } elseif ($exceptionStatus === 'paidLate') {
+                return $this->l("Paid late — Payment has been received after the configurable required timeframe.");
+            } else {
+                return $this->l("Expired — Not paid in the configurable required timeframe.");
+            }
         } elseif ($status === 'invalid') {
-            return $this->l("Invalid — Invoice has received payments but was invalid.");
+            return $this->l("Invalid — Invoice has received payment but was not confirmed in configurable required timeframe.");
         } elseif ($status === 'paid') {
-            return $this->l("Confirming — Payment has been received but not confirmed yet.");
+            if ($exceptionStatus === 'paidOver') {
+                return $this->l("Overpayment — Payment has been received but not confirmed yet, more funds than requested received.");
+            } else {
+                return $this->l("Confirming — Payment has been received but not confirmed yet.");
+            }
         } elseif ($status === 'confirmed' || $status === 'complete') {
-            return $this->l("Paid — Payment is confirmed.");
+            if ($exceptionStatus === 'paidOver') {
+                return $this->l("Overpayment — Payment is confirmed, more funds than requested received.");
+            } else {
+                return $this->l("Paid — Payment is confirmed.");
+            }
         }
         
         return $status . ', exception: ' . $exceptionStatus;
