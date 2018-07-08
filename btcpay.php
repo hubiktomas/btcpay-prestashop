@@ -42,8 +42,8 @@ class BTCPay extends PaymentModule
     protected $defaultValues = array();
 
     /**
-	 * @see Module::__construct()
-	 */
+     * @see Module::__construct()
+     */
     public function __construct()
     {
         $this->name = 'btcpay';
@@ -71,19 +71,19 @@ class BTCPay extends PaymentModule
         if (!count(Currency::checkPaymentCurrencies($this->id))) {
             $this->warning = $this->l("No currencies have been enabled for this module.");
         }
-		
-		if ($apiUrl = $this->getConfigValue('API_URL')) {
+        
+        if ($apiUrl = $this->getConfigValue('API_URL')) {
             $this->apiUrl = $apiUrl;
         }
-		
+        
         if ($apiKey = $this->getConfigValue('API_KEY')) {
             $this->apiKey = $apiKey;
         }
     }
 
     /**
-	 * @see Module::install()
-	 */
+     * @see Module::install()
+     */
     public function install()
     {
         if (Shop::isFeatureActive()) {
@@ -111,8 +111,8 @@ class BTCPay extends PaymentModule
     }
 
     /**
-	 * @see Module::uninstall()
-	 */
+     * @see Module::uninstall()
+     */
     public function uninstall()
     {
         if (
@@ -459,10 +459,10 @@ class BTCPay extends PaymentModule
         }
         
         $this->smarty->assign(array(
-			'payment_url' => $this->context->link->getModuleLink($this->name, 'payment', array(), Configuration::get('PS_SSL_ENABLED')),
-			'button_image_url' => $this->_path . 'views/img/payment.png',
-			'prestashop_15' => version_compare(_PS_VERSION_, '1.5', '>=') && version_compare(_PS_VERSION_, '1.6', '<'),
-		));
+            'payment_url' => $this->context->link->getModuleLink($this->name, 'payment', array(), Configuration::get('PS_SSL_ENABLED')),
+            'button_image_url' => $this->_path . 'views/img/payment.png',
+            'prestashop_15' => version_compare(_PS_VERSION_, '1.5', '>=') && version_compare(_PS_VERSION_, '1.6', '<'),
+        ));
 
         return $this->display(__FILE__, 'payment.tpl');
     }
@@ -524,7 +524,7 @@ class BTCPay extends PaymentModule
             if ($state['id_order_state'] == $this->getConfigValue('STATUS_RECEIVED')) {
                 $received = true;
             }
-			if ($state['id_order_state'] == $this->getConfigValue('STATUS_ERROR')) {
+            if ($state['id_order_state'] == $this->getConfigValue('STATUS_ERROR')) {
                 $error = true;
             }
             /*if ($state['id_order_state'] == $this->getConfigValue('STATUS_REFUND')) {

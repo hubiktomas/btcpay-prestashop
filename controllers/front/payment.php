@@ -39,8 +39,8 @@ class BTCPayPaymentModuleFrontController extends ModuleFrontController
     public $display_column_left = false;
 
     /**
-	 * @see FrontController::initContent()
-	 */
+     * @see FrontController::initContent()
+     */
     public function initContent()
     {
         parent::initContent();

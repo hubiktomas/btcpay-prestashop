@@ -36,35 +36,35 @@
 class BTCPayReturnModuleFrontController extends ModuleFrontController
 {
     /**
-	 * @see FrontController::initContent()
-	 */
+     * @see FrontController::initContent()
+     */
     public function initContent()
     {
         parent::initContent();
 
-		$cart_id = (int)Tools::getValue('cart_id');
-		$secure_key = Tools::getValue('key');
+        $cart_id = (int)Tools::getValue('cart_id');
+        $secure_key = Tools::getValue('key');
 
-		$cart = new Cart($cart_id);
-		$customer = new Customer($cart->id_customer);
+        $cart = new Cart($cart_id);
+        $customer = new Customer($cart->id_customer);
 
-		// first verify the secure key
-		if (!$cart_id || !$secure_key || $customer->secure_key != $secure_key) {
-			Tools::redirect('index.php');
-			return;
-		}
+        // first verify the secure key
+        if (!$cart_id || !$secure_key || $customer->secure_key != $secure_key) {
+            Tools::redirect('index.php');
+            return;
+        }
 
-		// check if order has been created yet (via the callback)
-		if ($cart->orderExists()) {
-			// order has been created, so redirect to order confirmation page
-			Tools::redirectLink($this->context->link->getPageLink('order-confirmation', true, null, array(
-				'id_cart' => $cart_id,
-				'id_module' => $this->module->id,
-				'key' => $secure_key,
-			)));
-		} else {
-			// redirect to order payment page so customer can try another payment method
-			Tools::redirect('index.php?controller=order?step=3');
-		}
+        // check if order has been created yet (via the callback)
+        if ($cart->orderExists()) {
+            // order has been created, so redirect to order confirmation page
+            Tools::redirectLink($this->context->link->getPageLink('order-confirmation', true, null, array(
+                'id_cart' => $cart_id,
+                'id_module' => $this->module->id,
+                'key' => $secure_key,
+            )));
+        } else {
+            // redirect to order payment page so customer can try another payment method
+            Tools::redirect('index.php?controller=order?step=3');
+        }
     }
 }
