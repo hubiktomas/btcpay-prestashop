@@ -608,8 +608,8 @@ class BTCPay extends PaymentModule
 
         // build request data
         $request = array(
-            'transactionSpeed' => 'medium',
             'fullNotifications' => true,
+            'extendedNotifications' => true,
             'price' => $cart->getOrderTotal(),
             'currency' => Currency::getCurrencyInstance($cart->id_currency)->iso_code,
             'orderID' => $cart->id,

@@ -36,8 +36,30 @@
 class BTCPayNotificationModuleFrontController extends ModuleFrontController
 {
     /**
-	 * @see FrontController::initContent()
-	 */
+     * Events that we are going to monitor and react on. Commented events are ignored.
+     */
+    public $events = array(
+        // 1001 => 'invoice_created',
+        1002 => 'invoice_receivedPayment',
+        1003 => 'invoice_paidInFull',
+        1004 => 'invoice_expired',
+        1005 => 'invoice_confirmed',
+        // 1006 => 'invoice_completed',
+        // 1007 => 'invoice_refunded',
+        1008 => 'invoice_markedInvalid',
+        // 1009 => 'invoice_paidAfterExpiration',
+        // 1010 => 'invoice_expiredPartial',
+        // 1011 => 'invoice_blockedByTierLimit',
+        // 1012 => 'invoice_manuallyNotified',
+        1013 => 'invoice_failedToConfirm',
+        // 1014 => 'invoice_latePayment',
+        // 1015 => 'invoice_adjustmentComplete',
+        // 1016 => 'invoice_refundComplete'
+    );
+
+    /**
+     * @see FrontController::initContent()
+     */
     public function initContent()
     {
         parent::initContent();
@@ -51,7 +73,27 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
             die;
         }
 
-        $callbackData = json_decode($callback);
+        $callbackJson = json_decode($callback);
+        
+        if (empty($callbackJson->event)) {
+            // regular IPN callback, not an event
+            die;
+        }
+        
+        if (empty($callbackJson->event->code)) {
+            $this->error("Event code missing from callback.", $callback);
+        }
+        
+        if (!array_key_exists($callbackJson->event->code, $this->events)) {
+            // the event is not one that we care about
+            die;
+        }
+        
+        // check that the callback has the data we need
+        if (empty($callbackJson->data)) {
+            $this->error("Data missing from callback.", $callback);
+        }
+        $callbackData = $callbackJson->data;
         
         // check that the callback has the reference data we need
         if (empty($callbackData->posData)) {
@@ -106,6 +148,11 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
         if ($callbackData->posData != $invoiceData->posData) {
             $this->error("Invoice data and callback data do not match.", $callback . PHP_EOL . json_encode($invoice));
         }
+        
+        if ($this->events[$callbackJson->event->code] === 'invoice_receivedPayment' && $invoiceData->status != 'expired') {
+            // we care about received payments just for expired invoices
+            die;
+        }
 
         // check that the cart and currency are both valid
         $cart = new Cart((int)$reference->cart_id);
@@ -128,8 +175,11 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
         // set order status according to payment status
         switch ($invoiceData->status) {
             case 'confirmed':
-            case 'complete':
                 $orderStatus = (int)$this->module->getConfigValue('STATUS_CONFIRMED');
+                break;
+            case 'complete':
+                // complete payment event fired after 6 confirmations, let's ignore it (configurable confirmed is enough)
+                die;
                 break;
             case 'paid':
                 $orderStatus = (int)$this->module->getConfigValue('STATUS_RECEIVED');
