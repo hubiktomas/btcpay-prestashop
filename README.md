@@ -14,3 +14,8 @@ Installation
 6. Once you've clicked `Save`, the module will automatically verify that the details are correct. If there are any problems with the values you've entered, you will see an appropriate error message. If the module settings save successfully then your details are correct and your BTCPay account has been successfully linked to your PrestaShop site.
 7. The last thing you need to do is go to **Modules > Payment** in your PrestaShop back-office and make sure you have all of the relevant currencies enabled for the BTCPay payment module under the **Currency Restrictions** panel.
 8. That's it. Your customers will now see new payment methods on your site's checkout page and be able to seamlessly pay for their orders with cryptocurrencies!
+
+TODO
+----
+
+* Use new access tokens instead of old legacy API keys
