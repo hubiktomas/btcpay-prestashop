@@ -178,8 +178,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
                 $orderStatus = (int)$this->module->getConfigValue('STATUS_CONFIRMED');
                 break;
             case 'complete':
-                // complete payment event fired after 6 confirmations, let's ignore it (configurable confirmed is enough)
-                die;
+                $orderStatus = (int)$this->module->getConfigValue('STATUS_CONFIRMED');
                 break;
             case 'paid':
                 $orderStatus = (int)$this->module->getConfigValue('STATUS_RECEIVED');
