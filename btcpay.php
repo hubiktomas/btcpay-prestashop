@@ -207,7 +207,7 @@ class BTCPay extends PaymentModule
                             'name' => 'BTCPAY_API_URL',
                             'type' => 'text',
                             'label' => $this->l("BTCPay URL"),
-                            'desc' => $this->l("BTCPay URL is used to communicate with your payment gateway. Enter domain of your BTCPay Server."),
+                            'desc' => $this->l("BTCPay URL is used to communicate with your payment gateway. Enter domain of your BTCPay Server including http:// or https://."),
                             'required' => true
                         ),
                         array(
