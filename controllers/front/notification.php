@@ -288,7 +288,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
      *
      * @param string $message error message
      * @param string $dataString callback string
-     * @param bool $die halts the whole exection after writing to log if true
+     * @param bool $die halts the whole execution after writing to log if true
      */
     public function error($message, $dataString = "", $die = true)
     {
