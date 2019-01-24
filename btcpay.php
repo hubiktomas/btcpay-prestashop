@@ -5,7 +5,7 @@
  * NOTICE OF LICENSE
  *
  * This file is part of BTCPay PrestaShop module.
- * 
+ *
  * BTCPay PrestaShop module is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the License,
@@ -58,7 +58,7 @@ class BTCPay extends PaymentModule
         $this->currencies_mode = 'checkbox';
 
         $this->bootstrap = true;
-        
+
         parent::__construct();
 
         $this->displayName = $this->l("BTCPay");
@@ -67,15 +67,15 @@ class BTCPay extends PaymentModule
         if (!$this->getConfigValue('API_KEY') || !$this->getConfigValue('API_URL')) {
             $this->warning = $this->l("Account settings must be configured before using this module.");
         }
-        
+
         if (!count(Currency::checkPaymentCurrencies($this->id))) {
             $this->warning = $this->l("No currencies have been enabled for this module.");
         }
-        
+
         if ($apiUrl = $this->getConfigValue('API_URL')) {
             $this->apiUrl = $apiUrl;
         }
-        
+
         if ($apiKey = $this->getConfigValue('API_KEY')) {
             $this->apiKey = $apiKey;
         }
@@ -90,8 +90,7 @@ class BTCPay extends PaymentModule
             Shop::setContext(Shop::CONTEXT_ALL);
         }
 
-        if (
-            !parent::install()
+        if (!parent::install()
             // only for PrestaShop 1.6 and lower
             || (version_compare(_PS_VERSION_, '1.7', '<') && !$this->registerHook('payment'))
             // only for PrestaShop 1.7 and higher
@@ -115,8 +114,7 @@ class BTCPay extends PaymentModule
      */
     public function uninstall()
     {
-        if (
-            !parent::uninstall() ||
+        if (!parent::uninstall() ||
             !Configuration::deleteByName('BTCPAY_API_URL') ||
             !Configuration::deleteByName('BTCPAY_API_KEY') ||
             //!Configuration::deleteByName('BTCPAY_CALLBACK_PASSWORD') ||
@@ -153,7 +151,7 @@ class BTCPay extends PaymentModule
             if ($fieldValues['BTCPAY_API_URL'] == "") {
                 $output .= $this->displayError($this->l("API URL is required."));
             }
-            
+
             // check api key
             if ($fieldValues['BTCPAY_API_KEY'] == "") {
                 $output .= $this->displayError($this->l("API Key is required."));
@@ -178,7 +176,7 @@ class BTCPay extends PaymentModule
 
     /**
      * Renders the settings form for the configuration page.
-     * 
+     *
      * @return string form html
      */
     public function renderSettingsForm()
@@ -188,7 +186,7 @@ class BTCPay extends PaymentModule
 
         // get all order statuses to use for order status options
         $orderStatuses = OrderState::getOrderStates((int)$this->context->cookie->id_lang);
-        
+
         // form fields
         $formFields = array(
             array(
@@ -371,7 +369,7 @@ class BTCPay extends PaymentModule
                 'href' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite('AdminModules')
             )
         );
-        
+
         $helper->tpl_vars = array(
             'fields_value' => $this->getConfigFieldValues(),
             'languages' => $this->context->controller->getLanguages(),
@@ -401,13 +399,13 @@ class BTCPay extends PaymentModule
             'BTCPAY_STATUS_ERROR' => $this->getConfigValue('STATUS_ERROR', true)/*,
             'BTCPAY_STATUS_REFUND' => $this->getConfigValue('STATUS_REFUND', true)*/
         );
-        
+
         return $configFieldValues;
     }
 
     /**
      * Loads module default config parameters values.
-     * 
+     *
      * @return array array of module default config values
      */
     public function getDefaultValues()
@@ -426,19 +424,19 @@ class BTCPay extends PaymentModule
 
     /**
      * Reads configuration parameter value from the database or form POST data if required.
-     * 
+     *
      * @param string $key name of the parameter without the prefix
      * @param bool $post whether to read the value from form POST data (true) or database (false)
-     * 
+     *
      * @return config parameter value
      */
     public function getConfigValue($key, $post = false)
     {
         $name = 'BTCPAY_' . $key;
-        $value = trim($post && isset($_POST[$name]) ? $_POST[$name] : Configuration::get($name));
+        $value = trim($post && Tools::getIsset($name) ? Tools::getValue($name) : Configuration::get($name));
 
         // use default value if empty
-        if (!strlen($value)) {
+        if (!Tools::strlen($value)) {
             $defaultValues = $this->getDefaultValues();
 
             if (isset($defaultValues[$name])) {
@@ -457,7 +455,7 @@ class BTCPay extends PaymentModule
         if (!$this->active || !$this->apiKey || !$this->apiUrl || !$this->checkCurrency($params['cart'])) {
             return;
         }
-        
+
         $this->smarty->assign(array(
             'payment_url' => $this->context->link->getModuleLink($this->name, 'payment', array(), Configuration::get('PS_SSL_ENABLED')),
             'button_image_url' => $this->_path . 'views/img/payment.png',
@@ -466,7 +464,7 @@ class BTCPay extends PaymentModule
 
         return $this->display(__FILE__, 'payment.tpl');
     }
-    
+
     /**
      * Handles hook for payment options for PS >= 1.7.
      */
@@ -483,7 +481,7 @@ class BTCPay extends PaymentModule
             ->setAction($this->context->link->getModuleLink($this->name, 'payment', array(), Configuration::get('PS_SSL_ENABLED')))
             ->setAdditionalInformation($this->context->smarty->fetch('module:btcpay/views/templates/front/payment_infos.tpl'));
         $paymentButtons[] = $newOption;
-        
+
         return $paymentButtons;
     }
 
@@ -495,7 +493,7 @@ class BTCPay extends PaymentModule
         if (!$this->active) {
             return;
         }
-        
+
         if (version_compare(_PS_VERSION_, '1.7', '>=') === true) {
             $order     = $params['order'];
         } else {
@@ -514,7 +512,7 @@ class BTCPay extends PaymentModule
         $received = false;
         $refunded = false;
         $error = false;
-        foreach($id_order_states as $state) {
+        foreach ($id_order_states as $state) {
             if ($state['id_order_state'] == (int)Configuration::get('PS_OS_OUTOFSTOCK')) {
                 $outofstock = true;
             }
@@ -583,7 +581,7 @@ class BTCPay extends PaymentModule
                 return $this->l("Paid — Payment is confirmed.");
             }
         }
-        
+
         return $status . ', exception: ' . $exceptionStatus;
     }
 
@@ -594,7 +592,7 @@ class BTCPay extends PaymentModule
      * @param array $requestData optional array of request data to override values retrieved from the order object
      *
      * @return array response data with new invoice
-     * 
+     *
      * @throws UnexpectedValueException if no API key or URL has been set
      * @throws Exception if an unexpected API response was returned
      */
@@ -603,7 +601,7 @@ class BTCPay extends PaymentModule
         if (!$this->apiUrl || !$this->apiKey) {
             throw new UnexpectedValueException("BTCPay API URL or Key has not been set.");
         }
-        
+
         $customer = new Customer($cart->id_customer);
 
         // build request data
@@ -633,14 +631,14 @@ class BTCPay extends PaymentModule
         // request new payment
         return $this->apiRequest('invoices', $request);
     }
-    
+
     /**
      * Requests a existing BTCPay invoice.
      *
      * @param String $id invoice ID
      *
      * @return array response data with the invoice
-     * 
+     *
      * @throws UnexpectedValueException if no API key or URL has been set
      * @throws Exception if an unexpected API response was returned
      */
@@ -662,13 +660,13 @@ class BTCPay extends PaymentModule
      * @param bool $returnRaw return the raw response string
      *
      * @return stdClass response data after json_decode
-     * 
+     *
      * @throws Exception
      */
     public function apiRequest($endpoint, $request = array(), $returnRaw = false)
     {
         $ch = curl_init();
-        
+
         if ($request) {
             $postData = json_encode($request);
             $length = strlen($postData);
@@ -736,7 +734,7 @@ class BTCPay extends PaymentModule
 
     /**
      * Creates a custom order status for this module.
-     * 
+     *
      * @param string $name new status name
      * @param string $label new status lables
      * @param array $options optional additional options
@@ -747,7 +745,7 @@ class BTCPay extends PaymentModule
      */
     public function createOrderStatus($name, $label, $options = array(), $template = null, $icon = 'status.gif')
     {
-        $osName = 'BTCPAY_OS_' . strtoupper($name);
+        $osName = 'BTCPAY_OS_' . Tools::strtoupper($name);
 
         if (!Configuration::get($osName)) {
             $os = new OrderState();
@@ -787,12 +785,12 @@ class BTCPay extends PaymentModule
 
     /**
      * Deletes custom order status for this module by name.
-     * 
+     *
      * @param string $name status name
      */
     public function deleteOrderStatus($name)
     {
-        $osName = 'BTCPAY_OS_' . strtoupper($name);
+        $osName = 'BTCPAY_OS_' . Tools::strtoupper($name);
 
         if ($osId = Configuration::get($osName)) {
             $os = new OrderState($osId);
@@ -806,14 +804,14 @@ class BTCPay extends PaymentModule
 
     /**
      * Gets the custom order status ID by name.
-     * 
+     *
      * @param string $name status name
      *
      * @return int|bool false on failure to retrieve, status ID if successful
      */
     public function getOrderStatus($name)
     {
-        return (int)ConfigurationCore::get('BTCPAY_OS_' . strtoupper($name));
+        return (int)ConfigurationCore::get('BTCPAY_OS_' . Tools::strtoupper($name));
     }
 
     /**
@@ -836,5 +834,5 @@ class BTCPay extends PaymentModule
             }
         }
         return false;
-    }    
+    }
 }

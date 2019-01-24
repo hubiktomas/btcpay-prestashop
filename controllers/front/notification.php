@@ -5,7 +5,7 @@
  * NOTICE OF LICENSE
  *
  * This file is part of BTCPay PrestaShop module.
- * 
+ *
  * BTCPay PrestaShop module is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the License,
@@ -65,7 +65,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
         parent::initContent();
 
         // get the callback data
-        $callback = file_get_contents('php://input');
+        $callback = Tools::file_get_contents('php://input');
         // log all callbacks received for debugging purposes
         //$this->error("Callback received:", $callback, false);
         if (!$callback) {
@@ -74,27 +74,27 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
         }
 
         $callbackJson = json_decode($callback);
-        
+
         if (empty($callbackJson->event)) {
             // regular IPN callback, not an event
             die;
         }
-        
+
         if (empty($callbackJson->event->code)) {
             $this->error("Event code missing from callback.", $callback);
         }
-        
+
         if (!array_key_exists($callbackJson->event->code, $this->events)) {
             // the event is not one that we care about
             die;
         }
-        
+
         // check that the callback has the data we need
         if (empty($callbackJson->data)) {
             $this->error("Data missing from callback.", $callback);
         }
         $callbackData = $callbackJson->data;
-        
+
         // check that the callback has the reference data we need
         if (empty($callbackData->posData)) {
             $this->error("Reference data missing from callback.", $callback);
@@ -112,7 +112,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
         if ($callbackReference->hash != crypt($callbackReference->cart_id, $this->module->getConfigValue('API_KEY'))) {
             $this->error("Callback hash validation failed.", $callback);
         }
-        
+
         $invoice = $this->module->getPayment($callbackData->id);
         // log all invoices retrieved for debugging purposes
         //$this->error("Invoice retrieved:", json_encode($invoice), false);
@@ -123,7 +123,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
         }
 
         $invoiceData = $invoice->data;
-        
+
         // check that the callback has the reference data we need
         if (empty($invoiceData->posData)) {
             $this->error("Reference data missing from invoice.", json_encode($invoice));
@@ -141,14 +141,14 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
         if ($reference->hash != crypt($reference->cart_id, $this->module->getConfigValue('API_KEY'))) {
             $this->error("Invoice hash validation failed.", json_encode($invoice));
         }
-        
+
         if ($callbackData->id != $invoiceData->id) {
             $this->error("Invoice ID and callback ID do not match.", $callback . PHP_EOL . json_encode($invoice));
         }
         if ($callbackData->posData != $invoiceData->posData) {
             $this->error("Invoice data and callback data do not match.", $callback . PHP_EOL . json_encode($invoice));
         }
-        
+
         if ($this->events[$callbackJson->event->code] === 'invoice_receivedPayment' && $invoiceData->status != 'expired') {
             // we care about received payments just for expired invoices
             die;
@@ -203,11 +203,11 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
                 $this->error("Unknown invoice status:", json_encode($invoice));
                 die;
         }
-        
+
         // check if this cart has already been converted into an order
         if ($cart->orderExists()) {
             $order = new Order((int)OrderCore::getOrderByCartId($cart->id));
-            
+
             // if the order status is different from the current one, add order history
             if ($order->current_state != $orderStatus) {
                 $orderHistory = new OrderHistory();
@@ -232,7 +232,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
             // set payment method name to currency name if enabled
             $this->module->validateOrder($cart->id, $orderStatus, $invoiceData->price, $payment_method, null, $extra, null, false, $customer->secure_key, $shop);
             $order = new Order($this->module->currentOrder);
-            
+
             // add BTCPay payment info to private order note for admin reference
             $messageLines = array(
                 $this->module->l('Payment Status') . ': ' . $this->module->getStatusDesc($invoiceData->status, $invoiceData->exceptionStatus),
@@ -241,7 +241,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
                 $this->module->l('Invoice URL') . ': ' . rtrim($this->module->getConfigValue('API_URL'), '/') . '/invoices/' . $invoiceData->id,
                 $this->module->l('Cryptocurrencies Info') . ': '
             );
-            
+
             foreach($invoiceData->cryptoInfo as $cryptoInfo) {
                 $messageLines[] = $cryptoInfo->cryptoCode . ' - ' . $cryptoInfo->paymentType;
                 $messageLines[] = '- ' . $this->module->l('Payment Address') . ': ' . $cryptoInfo->address;
@@ -278,14 +278,14 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
                 $customer_message->add();
             }
         }
-        
+
         // we're done doing what we need to do, so make sure nothing else happens
         die;
     }
 
     /**
      * Writes an error message to /log/btcpay_errors.log and halts execution if not set otherwise.
-     * 
+     *
      * @param string $message error message
      * @param string $dataString callback string
      * @param bool $die halts the whole exection after writing to log if true

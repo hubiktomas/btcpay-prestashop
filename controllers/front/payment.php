@@ -5,7 +5,7 @@
  * NOTICE OF LICENSE
  *
  * This file is part of BTCPay PrestaShop module.
- * 
+ *
  * BTCPay PrestaShop module is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the License,
@@ -56,7 +56,7 @@ class BTCPayPaymentModuleFrontController extends ModuleFrontController
         if (!$this->module->checkCurrency($cart)) {
             $this->displayError("Current currency not enabled for this payment method.");
         }
-        
+
         // attempt to create a new BTCPay payment
         try {
             $response = $this->module->createPayment($cart);
@@ -75,7 +75,7 @@ class BTCPayPaymentModuleFrontController extends ModuleFrontController
 
     /**
      * Redirects to the error page and displays message to the customer.
-     * 
+     *
      * @param string $errorMessage error message to display to the customer
      */
     public function displayError($errorMessage)
