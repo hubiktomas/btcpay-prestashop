@@ -67,8 +67,7 @@ class BTCPayPaymentModuleFrontController extends ModuleFrontController
             } else {
                 $this->displayError("Failed to retrieve BTCPay payment URL.");
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->displayError($e->getMessage());
         }
     }

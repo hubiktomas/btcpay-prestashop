@@ -242,7 +242,7 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
                 $this->module->l('Cryptocurrencies Info') . ': '
             );
 
-            foreach($invoiceData->cryptoInfo as $cryptoInfo) {
+            foreach ($invoiceData->cryptoInfo as $cryptoInfo) {
                 $messageLines[] = $cryptoInfo->cryptoCode . ' - ' . $cryptoInfo->paymentType;
                 $messageLines[] = '- ' . $this->module->l('Payment Address') . ': ' . $cryptoInfo->address;
                 $messageLines[] = '- ' . $this->module->l('Requested Amount') . ': ' . $cryptoInfo->totalDue . ' ' . $cryptoInfo->cryptoCode;

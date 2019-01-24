@@ -669,7 +669,7 @@ class BTCPay extends PaymentModule
 
         if ($request) {
             $postData = json_encode($request);
-            $length = strlen($postData);
+            $length = Tools::strlen($postData);
         } else {
             $length = 0;
         }
