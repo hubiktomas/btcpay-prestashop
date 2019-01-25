@@ -775,7 +775,7 @@ class BTCPay extends PaymentModule
 
                 // copy icon image to os folder
                 if ($icon) {
-                    @copy(__DIR__ . '/views/img/' . $icon, _PS_ROOT_DIR_ . '/img/os/' . $os->id . '.gif');
+                    copy(__DIR__ . '/views/img/' . $icon, _PS_ROOT_DIR_ . '/img/os/' . $os->id . '.gif');
                 }
 
                 return (int)$os->id;
