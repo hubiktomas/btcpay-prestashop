@@ -72,11 +72,13 @@ class BTCPay extends PaymentModule
             $this->warning = $this->l("No currencies have been enabled for this module.");
         }
 
-        if ($apiUrl = $this->getConfigValue('API_URL')) {
+        $apiUrl = $this->getConfigValue('API_URL');
+        if ($apiUrl) {
             $this->apiUrl = $apiUrl;
         }
 
-        if ($apiKey = $this->getConfigValue('API_KEY')) {
+        $apiKey = $this->getConfigValue('API_KEY');
+        if ($apiKey) {
             $this->apiKey = $apiKey;
         }
     }
@@ -791,8 +793,9 @@ class BTCPay extends PaymentModule
     public function deleteOrderStatus($name)
     {
         $osName = 'BTCPAY_OS_' . Tools::strtoupper($name);
+        $osId = Configuration::get($osName);
 
-        if ($osId = Configuration::get($osName)) {
+        if ($osId) {
             $os = new OrderState($osId);
             $os->delete();
 
