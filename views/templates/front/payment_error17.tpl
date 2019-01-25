@@ -4,7 +4,7 @@
  * NOTICE OF LICENSE
  *
  * This file is part of BTCPay PrestaShop module.
- * 
+ *
  * BTCPay PrestaShop module is free software: you can redistribute it
  * and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the License,
@@ -33,7 +33,7 @@
 
 {block name="page_content"}
   <h1 class="page-heading">{$heading|escape:'html':'UTF-8'}</h1>
-  
+
   <div class="alert alert-danger">
     {l s='An error occurred while attempting to create a new BTCPay payment.' mod='btcpay'}
   </div>
