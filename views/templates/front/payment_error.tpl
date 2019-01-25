@@ -32,10 +32,10 @@
 {assign var='back_link' value={$link->getPageLink('order', true, NULL, 'step=3')|escape:'html':'UTF-8'}}
 
 {capture name=path}
-  <a href="{$back_link|escape:'html':'UTF-8'}" title="{l s='Go back to the Checkout' mod='btcpay'}">{l s='Checkout' mod='btcpay'}</a><span class="navigation-pipe">{$navigationPipe}</span>{$heading}
+  <a href="{$back_link|escape:'html':'UTF-8'}" title="{l s='Go back to the Checkout' mod='btcpay'}">{l s='Checkout' mod='btcpay'}</a><span class="navigation-pipe">{$navigationPipe|escape:'html':'UTF-8'}</span>{$heading|escape:'html':'UTF-8'}
 {/capture}
 
-<h1 class="page-heading">{$heading}</h1>
+<h1 class="page-heading">{$heading|escape:'html':'UTF-8'}</h1>
 
 {assign var='current_step' value='payment'}
 {include file="$tpl_dir./order-steps.tpl"}
@@ -45,9 +45,9 @@
 </div>
 
 <p>
-  {{l s='The raw response data is displayed below. Please %sforward this%s to the site administrator so that they may rectify the issue.' mod='btcpay'}|sprintf:"<a href=\"{$link->getPageLink('contact')}\" target=\"_blank\">":'</a>'}
+  {l s='The raw response data is displayed below. Please' mod='btcpay'} <a href="{$link->getPageLink('contact')|escape:'html':'UTF-8'}" target="_blank">{l s='forward this' mod='btcpay'}</a> {l s='to the site administrator so that they may rectify the issue.' mod='btcpay'}
 </p>
-<pre>{$error}</pre>
+<pre>{$error|escape:'html':'UTF-8'}</pre>
 
 <p class="cart_navigation clearfix" id="cart_navigation">
   <a href="{$back_link|escape:'html':'UTF-8'}" class="button-exclusive btn btn-default">

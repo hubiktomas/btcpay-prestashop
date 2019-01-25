@@ -31,7 +31,7 @@
 
 {if $refunded}
   <div class="alert alert-info">
-    {{l s='Your payment has been refunded. Please make sure, you send the payment on time in full amount including network fee. Please %scontact us%s if you need further assistance.' mod='btcpay'}|sprintf:"<a href=\"{$link->getPageLink('contact')}\">":'</a>' nofilter}
+    {l s='Your payment has been refunded. Please make sure, you send the payment on time in full amount including network fee. Please' mod='btcpay'} <a href="{$link->getPageLink('contact')|escape:'html':'UTF-8'}">{l s='contact us' mod='btcpay'}</a> {l s='if you need further assistance.' mod='btcpay'}
   </div>
 {elseif $confirmed}
   {if $outofstock }
@@ -49,10 +49,10 @@
   </div>
 {elseif $error}
   <div class="alert alert-danger">
-    {{l s='There was a problem processing your order, please %scontact us%s.' mod='btcpay'}|sprintf:"<a href=\"{$link->getPageLink('contact')}\">":'</a>' nofilter}
+    {l s='There was a problem processing your order, please' mod='btcpay'} <a href="{$link->getPageLink('contact')|escape:'html':'UTF-8'}">{l s='contact us' mod='btcpay'}</a>.
   </div>
 {else}
   <div class="alert alert-danger">
-    {{l s='Unexpected error, please %scontact us%s.' mod='btcpay'}|sprintf:"<a href=\"{$link->getPageLink('contact')}\">":'</a>' nofilter}
+    {l s='Unexpected error, please' mod='btcpay'} <a href="{$link->getPageLink('contact')|escape:'html':'UTF-8'}">{l s='contact us' mod='btcpay'}</a>.
   </div>
 {/if}

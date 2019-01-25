@@ -31,8 +31,8 @@
 
 {if $prestashop_15}
   <p class="payment_module">
-    <a href="{$payment_url|escape:'html'}" title="{l s='Pay with cryptocurrencies' mod='btcpay'}">
-      <img src="{$button_image_url}" height="50" />
+    <a href="{$payment_url|escape:'html':'UTF-8'}" title="{l s='Pay with cryptocurrencies' mod='btcpay'}">
+      <img src="{$button_image_url|escape:'html':'UTF-8'}" height="50" />
       {l s='Pay with cryptocurrencies' mod='btcpay'}
     </a>
   </p>
@@ -40,7 +40,7 @@
   <div class="row">
     <div class="col-xs-12">
       <p class="payment_module">
-        <a class="btcpay bankwire" href="{$payment_url|escape:'html'}" title="{l s='Pay with cryptocurrencies' mod='btcpay'}" style="background-image: url('{$button_image_url}'); background-position: 15px 50%; padding-left: 180px;">
+        <a class="btcpay bankwire" href="{$payment_url|escape:'html':'UTF-8'}" title="{l s='Pay with cryptocurrencies' mod='btcpay'}" style="background-image: url('{$button_image_url|escape:'html':'UTF-8'}'); background-position: 15px 50%; padding-left: 180px;">
           {l s='Pay with cryptocurrencies' mod='btcpay'}
         </a>
       </p>
