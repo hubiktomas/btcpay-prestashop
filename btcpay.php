@@ -504,8 +504,8 @@ class BTCPay extends PaymentModule
 
         $id_order_states = Db::getInstance()->ExecuteS('
             SELECT `id_order_state`
-            FROM `'._DB_PREFIX_.'order_history`
-            WHERE `id_order` = '.$order->id.'
+            FROM `' . _DB_PREFIX_ . 'order_history`
+            WHERE `id_order` = ' . $order->id . '
             ORDER BY `date_add` DESC, `id_order_history` DESC
         ');
 
@@ -682,7 +682,7 @@ class BTCPay extends PaymentModule
                 'Content-Type: application/json',
                 'Content-Length: ' . $length,
                 'Authorization: Basic ' . base64_encode($this->apiKey),
-                'X-BTCPay-Plugin-Info: PrestaShop BTCPay '.$this->version,
+                'X-BTCPay-Plugin-Info: PrestaShop BTCPay ' . $this->version,
             ),
             CURLINFO_HEADER_OUT => true,
             CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
