@@ -548,7 +548,7 @@ class BTCPay extends PaymentModule
      * Translates status codes to human readable descriptions.
      *
      * @param string $status status code
-     * @param bool $unhandledExceptions if there was an unhandledExceptions flag included in the invoice model
+     * @param bool $exceptionStatus if there was an unhandledExceptions flag included in the invoice model
      *
      * @return string human readable status description
      */
