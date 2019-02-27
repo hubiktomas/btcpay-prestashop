@@ -172,6 +172,10 @@ class BTCPayNotificationModuleFrontController extends ModuleFrontController
             $this->error("Secure key in invoice is invalid.", json_encode($invoice));
         }
 
+        // set context variables
+        $this->context->cart = $cart;
+        $this->context->customer = $customer;
+
         // set order status according to payment status
         switch ($invoiceData->status) {
             case 'confirmed':
